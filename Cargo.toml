@@ -1,0 +1,44 @@
+# Auto-generated from "Cargo.yml"
+[badges]
+[badges.maintenance]
+status = "actively-developed"
+
+[badges.travis-ci]
+repository = "najamelan/async_chanx"
+
+[build-dependencies]
+rustc_version = "^0.2"
+
+[dependencies]
+futures-core = "^0.3"
+futures-sink = "^0.3"
+thiserror = "^1"
+
+[dependencies.tokio]
+features = ["sync"]
+version = "^0.2"
+
+[dev-dependencies]
+pretty_assertions = "^0.6"
+
+[features]
+
+[package]
+authors = ["Naja Melan <najamelan@autistici.org>"]
+categories = []
+description = "UPDATE ME"
+documentation = "https://docs.rs/async_chanx"
+edition = "2018"
+exclude = ["benches", "examples", "tests"]
+keywords = []
+license = "Unlicense"
+name = "async_chanx"
+readme = "README.md"
+repository = "https://github.com/najamelan/async_chanx"
+version = "0.1.0"
+
+[package.metadata]
+[package.metadata.docs]
+[package.metadata.docs.rs]
+all-features = true
+targets = []

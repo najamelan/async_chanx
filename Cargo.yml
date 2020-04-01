@@ -1,0 +1,69 @@
+package:
+
+  # When releasing to crates.io:
+  #
+  # - last check for all TODO, FIXME, expect, unwrap.
+  # - re-read and final polish of documentation
+  # - run cargo udeps
+  # - run cargo clippy
+  # - recheck log statements (informative, none left that were just for development, ...)
+  # - Update CHANGELOG.md.
+  # - Update version numbers in Cargo.yml, Cargo.toml, install section of readme.
+  # - verify CI result
+  # - run cargo test on dependent crates
+  # - cargo publish
+  # - merge dev branch into master
+  # - create git tag with version number
+  #
+  version       : 0.1.0
+  name          : async_chanx
+  authors       : [ Naja Melan <najamelan@autistici.org> ]
+  description   : UPDATE ME
+  documentation : https://docs.rs/async_chanx
+  repository    : https://github.com/najamelan/async_chanx
+  readme        : README.md
+  keywords      : []
+  categories    : []
+  license       : Unlicense
+  edition       : "2018"
+  exclude       : [ benches, examples, tests ]
+
+  metadata:
+    docs:
+      rs:
+        all-features: true
+        targets     : []
+
+
+badges:
+
+  maintenance : { status     : actively-developed       }
+  travis-ci   : { repository : najamelan/async_chanx }
+
+
+features:
+
+
+
+dependencies:
+
+  # Public dependencies (bump major if changing any version number here)
+  # Means we use types from these crates in our public API.
+  #
+  futures-core : ^0.3
+  futures-sink : ^0.3
+  tokio        : { version: ^0.2, features: [ sync ] }
+
+  # Private dependencies
+  #
+  thiserror: ^1
+
+
+dev-dependencies:
+
+  pretty_assertions   : ^0.6
+
+
+build-dependencies:
+
+  rustc_version: ^0.2
