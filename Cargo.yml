@@ -53,17 +53,33 @@ dependencies:
   futures-core : ^0.3
   futures-sink : ^0.3
   tokio        : { version: ^0.2, features: [ sync ] }
+  influmenza   : { path: ../influmenza }
+  futures      : ^0.3
+  piper        : ^0.1
 
   # Private dependencies
   #
-  thiserror: ^1
 
 
 dev-dependencies:
 
-  pretty_assertions   : ^0.6
-
+  async-std         : { version: ^1, features: [ attributes ] }
+  pretty_assertions : ^0.6
+  assert_matches    : ^1
+  criterion         : ^0.3
+  async_executors   : { version: ^0.2, features: [ async_std, localpool, spawn_handle ] }
+  tokio             : { version: ^0.2, features: [ sync, stream ] }
+  futures-test      : ^0.3
 
 build-dependencies:
 
   rustc_version: ^0.2
+
+
+bench:
+
+  - name   : bounded
+    harness: false
+
+  - name   : spsc
+    harness: false

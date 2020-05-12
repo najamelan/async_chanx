@@ -26,12 +26,18 @@
 )]
 
 
+mod piper_sender;
 mod tokio_bounded;
+mod tokio_unbounded;
+mod futures_unbounded;
 mod error;
 
 pub use
 {
+	piper_sender::*,
 	tokio_bounded::*,
+	tokio_unbounded::*,
+	futures_unbounded::*,
 	error::*,
 };
 
@@ -44,15 +50,6 @@ mod import
 	{
 		std :: { fmt, task::{ Context, Poll }, pin::Pin } ,
 		futures_sink:: { Sink } ,
-		thiserror:: { Error } ,
-	};
-
-
-	#[ cfg( test ) ]
-	//
-	pub(crate) use
-	{
-		pretty_assertions :: { assert_eq } ,
 	};
 }
 

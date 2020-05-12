@@ -14,6 +14,13 @@ before_cache:
   - rm -rf /home/travis/.cargo/git
   - rm -rf /home/travis/.cargo/registry
   - rm -rf /home/travis/.cargo/bin/cargo-tarpaulin
+  - rm -rf target/debug/incremental/{async_chanx,build_script_build}-*
+  - rm -rf target/debug/.fingerprint/async_chanx-*
+  - rm -rf target/debug/build/async_chanx-*
+  - rm -rf target/debug/deps/libasync_chanx-*
+  - rm -rf target/debug/deps/async_chanx-*
+  - rm -rf target/debug/{async_chanx,libasync_chanx}.d
+  - cargo clean -p async_chanx
 
 
 branches:

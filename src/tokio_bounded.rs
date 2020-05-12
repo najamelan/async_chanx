@@ -5,11 +5,38 @@ use
 };
 
 
-#[ derive( Clone ) ]
+/// A wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
+/// It will also return [`ChanErr`] like all the other wrappers in this crate.
 //
 pub struct TokioSender<I>
 {
 	inner: Sender<I>,
+}
+
+
+impl<I> TokioSender<I>
+{
+	/// Create a wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
+	/// It will also return [`ChanErr`] like all the other wrappers in this crate.
+	//
+	pub fn new( inner: Sender<I> ) -> TokioSender<I>
+	{
+		Self{ inner }
+	}
+
+	/// Access the inner [`tokio::sync::mpsc::Sender`].
+	//
+	pub fn inner( &self ) -> &Sender<I>
+	{
+		&self.inner
+	}
+
+	/// Access the inner [`tokio::sync::mpsc::Sender`] mutably.
+	//
+	pub fn inner_mut( &mut self ) -> &mut Sender<I>
+	{
+		&mut self.inner
+	}
 }
 
 
@@ -44,6 +71,15 @@ impl<I> Sink<I> for TokioSender<I>
 	fn poll_close(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>>
 	{
 		Poll::Ready(Ok(()))
+	}
+}
+
+
+impl<I> Clone for TokioSender<I>
+{
+	fn clone(&self) -> Self
+	{
+		Self{ inner: self.inner.clone() }
 	}
 }
 

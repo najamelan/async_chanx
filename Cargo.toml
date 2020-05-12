@@ -6,20 +6,47 @@ status = "actively-developed"
 [badges.travis-ci]
 repository = "najamelan/async_chanx"
 
+[[bench]]
+harness = false
+name = "bounded"
+
+[[bench]]
+harness = false
+name = "spsc"
+
 [build-dependencies]
 rustc_version = "^0.2"
 
 [dependencies]
+futures = "^0.3"
 futures-core = "^0.3"
 futures-sink = "^0.3"
-thiserror = "^1"
+piper = "^0.1"
+
+[dependencies.influmenza]
+path = "../influmenza"
 
 [dependencies.tokio]
 features = ["sync"]
 version = "^0.2"
 
 [dev-dependencies]
+assert_matches = "^1"
+criterion = "^0.3"
+futures-test = "^0.3"
 pretty_assertions = "^0.6"
+
+[dev-dependencies.async-std]
+features = ["attributes"]
+version = "^1"
+
+[dev-dependencies.async_executors]
+features = ["async_std", "localpool", "spawn_handle"]
+version = "^0.2"
+
+[dev-dependencies.tokio]
+features = ["sync", "stream"]
+version = "^0.2"
 
 [features]
 
