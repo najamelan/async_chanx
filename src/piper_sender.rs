@@ -127,9 +127,9 @@ impl<I: 'static +  Send + Unpin> Sink<I> for PiperSender<I>
 	}
 
 
-	fn poll_close(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>>
+	fn poll_close( self: Pin<&mut Self>, cx: &mut Context<'_> ) -> Poll<Result<(), Self::Error>>
 	{
-		Poll::Ready(Ok(()))
+		self.poll_flush( cx )
 	}
 }
 

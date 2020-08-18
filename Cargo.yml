@@ -59,7 +59,7 @@ dependencies:
 
   # Private dependencies
   #
-
+  parking_lot: ^0.10
 
 dev-dependencies:
 
