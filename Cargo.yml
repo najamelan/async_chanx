@@ -15,7 +15,7 @@ package:
   # - merge dev branch into master
   # - create git tag with version number
   #
-  version       : 0.1.0
+  version       : 0.1.0-alpha.1
   name          : async_chanx
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : UPDATE ME
@@ -37,7 +37,7 @@ package:
 
 badges:
 
-  maintenance : { status     : actively-developed       }
+  maintenance : { status     : actively-developed    }
   travis-ci   : { repository : najamelan/async_chanx }
 
 
@@ -53,21 +53,20 @@ dependencies:
   futures-core : ^0.3
   futures-sink : ^0.3
   tokio        : { version: ^0.2, features: [ sync ] }
-  influmenza   : { path: ../influmenza }
   futures      : ^0.3
-  piper        : ^0.1
+  # async-channel: ^1
 
   # Private dependencies
   #
-  parking_lot: ^0.10
+  # parking_lot: ^0.11
 
 dev-dependencies:
 
-  async-std         : { version: ^1, features: [ attributes ] }
+  async-std         : { version: ^1, features: [ attributes ], default-features: false }
   pretty_assertions : ^0.6
   assert_matches    : ^1
   criterion         : ^0.3
-  async_executors   : { version: ^0.2, features: [ async_std, localpool, spawn_handle ] }
+  async_executors   : { version: ^0.3, features: [ async_std, localpool ] }
   tokio             : { version: ^0.2, features: [ sync, stream ] }
   futures-test      : ^0.3
 
@@ -79,7 +78,9 @@ build-dependencies:
 bench:
 
   - name   : bounded
+    path   : benches/bounded.rs
     harness: false
 
   - name   : spsc
+    path   : benches/spsc.rs
     harness: false

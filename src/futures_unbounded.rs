@@ -5,8 +5,9 @@ use
 };
 
 
-/// A wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
-/// It will also return [`ChanErr`] like all the other wrappers in this crate.
+/// A wrapper around [`futures::channel::UnboundedSender`]. This type already
+/// implements `Sink`, but we unify the error type to [`ChanErr`] like the other
+/// wrappers in this crate.
 //
 #[ derive( Debug )]
 //

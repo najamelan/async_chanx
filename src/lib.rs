@@ -26,7 +26,8 @@
 )]
 
 
-mod piper_sender;
+// mod async_channel;
+// mod crossfire;
 mod tokio_bounded;
 mod tokio_unbounded;
 mod futures_unbounded;
@@ -34,7 +35,8 @@ mod error;
 
 pub use
 {
-	piper_sender::*,
+	// crate::async_channel::*,
+	// crate::crossfire::*,
 	tokio_bounded::*,
 	tokio_unbounded::*,
 	futures_unbounded::*,

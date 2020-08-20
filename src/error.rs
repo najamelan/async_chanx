@@ -4,7 +4,10 @@ use crate::import::*;
 //
 pub type ChanRes<T, I> = Result<T, ChanErr<I>>;
 
-/// Errors that can happen in thespis_impl.
+
+/// A unified error for async channels. When creating a trait object based on
+/// `Sink`, you will also have to specify the error type. By creating a single
+/// type here that raps the native errors from channels, we make this easier.
 //
 #[ derive( Clone, PartialEq, Eq ) ]
 //

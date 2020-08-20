@@ -9,10 +9,12 @@ repository = "najamelan/async_chanx"
 [[bench]]
 harness = false
 name = "bounded"
+path = "benches/bounded.rs"
 
 [[bench]]
 harness = false
 name = "spsc"
+path = "benches/spsc.rs"
 
 [build-dependencies]
 rustc_version = "^0.2"
@@ -21,11 +23,6 @@ rustc_version = "^0.2"
 futures = "^0.3"
 futures-core = "^0.3"
 futures-sink = "^0.3"
-parking_lot = "^0.10"
-piper = "^0.1"
-
-[dependencies.influmenza]
-path = "../influmenza"
 
 [dependencies.tokio]
 features = ["sync"]
@@ -38,12 +35,13 @@ futures-test = "^0.3"
 pretty_assertions = "^0.6"
 
 [dev-dependencies.async-std]
+default-features = false
 features = ["attributes"]
 version = "^1"
 
 [dev-dependencies.async_executors]
-features = ["async_std", "localpool", "spawn_handle"]
-version = "^0.2"
+features = ["async_std", "localpool"]
+version = "^0.3"
 
 [dev-dependencies.tokio]
 features = ["sync", "stream"]
@@ -63,7 +61,7 @@ license = "Unlicense"
 name = "async_chanx"
 readme = "README.md"
 repository = "https://github.com/najamelan/async_chanx"
-version = "0.1.0"
+version = "0.1.0-alpha.1"
 
 [package.metadata]
 [package.metadata.docs]
