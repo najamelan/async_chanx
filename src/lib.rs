@@ -50,7 +50,7 @@ mod import
 {
 	pub(crate) use
 	{
-		std :: { fmt, task::{ Context, Poll }, pin::Pin } ,
+		std :: { fmt, task::{ Context, Poll }, pin::Pin, future::Future } ,
 		futures_sink:: { Sink } ,
 	};
 }

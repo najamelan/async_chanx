@@ -17,22 +17,23 @@ name = "spsc"
 path = "benches/spsc.rs"
 
 [build-dependencies]
-rustc_version = "^0.2"
+rustc_version = "^0.3"
 
 [dependencies]
 futures = "^0.3"
 futures-core = "^0.3"
 futures-sink = "^0.3"
+tokio-stream = "^0.1"
 
 [dependencies.tokio]
 features = ["sync"]
-version = "^0.2"
+version = "^1"
 
 [dev-dependencies]
 assert_matches = "^1"
 criterion = "^0.3"
 futures-test = "^0.3"
-pretty_assertions = "^0.6"
+pretty_assertions = "^0.7"
 
 [dev-dependencies.async-std]
 default-features = false
@@ -41,11 +42,11 @@ version = "^1"
 
 [dev-dependencies.async_executors]
 features = ["async_std", "localpool"]
-version = "^0.3"
+version = "^0.4"
 
 [dev-dependencies.tokio]
-features = ["sync", "stream"]
-version = "^0.2"
+features = ["sync"]
+version = "^1"
 
 [features]
 
@@ -61,7 +62,7 @@ license = "Unlicense"
 name = "async_chanx"
 readme = "README.md"
 repository = "https://github.com/najamelan/async_chanx"
-version = "0.1.0-alpha.1"
+version = "0.1.0-alpha.2"
 
 [package.metadata]
 [package.metadata.docs]
