@@ -35,8 +35,10 @@ fn tokio_bounded_receiver_woken_when_senders_dropped()
 	let (start_tx, start_rx) = oneshot::channel();
 	let (end_tx  , end_rx  ) = oneshot::channel();
 
-	let (tx, mut rx) = mpsc::channel::<()>( 3 );
-	let mut tx    = TokioSender::new( tx );
+	let (tx, rx) = mpsc::channel::<()>( 3 );
+	let mut tx   = TokioSender::new( tx );
+
+	let mut rx = tokio_stream::wrappers::ReceiverStream::new(rx);
 
 	let sender_thread = std::thread::spawn( move ||
 	{
