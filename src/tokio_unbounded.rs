@@ -1,6 +1,6 @@
 use
 {
-	crate::{ import::*, ChanErr },
+	crate::{ import::*, ChanErr, ChanErrKind },
 	tokio::sync::mpsc::{ UnboundedSender, error::{ SendError } },
 };
 
@@ -55,7 +55,15 @@ impl<I> Sink<I> for TokioUnboundedSender<I>
 	{
 		match self.as_mut().inner.send( msg )
 		{
-			Err( SendError(t) ) => Err( ChanErr::ClosedI(t) ),
+			Err( SendError(t) ) => Err
+			(
+				ChanErr
+				{
+					kind: ChanErrKind::Closed,
+					item: Some(t),
+				}
+			),
+
 			Ok(_) => Ok(()),
 		}
 	}

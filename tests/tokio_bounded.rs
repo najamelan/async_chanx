@@ -22,7 +22,7 @@ fn tokio_bounded_sp_buffer_size()
 	let (tx, _rx) = mpsc::channel( 3 );
 	let mut tx    = TokioSender::new( tx );
 
-	assert_matches!( sp_buffer_size( &mut tx ), MessageCount::Ready( Ok(4) ) );
+	crate::assert_matches!( sp_buffer_size( &mut tx ), MessageCount::Ready( Ok(4) ) );
 }
 
 
@@ -59,7 +59,7 @@ fn tokio_bounded_receiver_woken_when_senders_dropped()
 		let (waker, count) = futures_test::task::new_count_waker();
 		let mut cx         = Context::from_waker( &waker );
 
-		assert_matches!( Pin::new( &mut rx ).poll_next( &mut cx ), Poll::Pending );
+		crate::assert_matches!( Pin::new( &mut rx ).poll_next( &mut cx ), Poll::Pending );
 
 		assert_eq!( count, 0 );
 
