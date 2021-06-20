@@ -1,12 +1,11 @@
 // See: https://github.com/rust-lang/rust/issues/44732#issuecomment-488766871
 //
-#![cfg_attr( nightly, feature(doc_cfg, external_doc) )]
-#![cfg_attr( nightly, doc(include = "../README.md")  )]
+#![cfg_attr( nightly, feature(doc_cfg) )]
+#![ cfg_attr( nightly, cfg_attr( nightly, doc = include_str!("../README.md") )) ]
 #![doc = ""] // empty doc line to handle missing doc warning when the feature is missing.
 
 #![ doc    ( html_root_url = "https://docs.rs/async_chanx" ) ]
-#![ forbid ( unsafe_code                                      ) ]
-#![ allow  ( clippy::suspicious_else_formatting               ) ]
+#![ allow  ( clippy::suspicious_else_formatting            ) ]
 
 #![ warn
 (
@@ -30,7 +29,7 @@
 // mod crossfire;
 mod tokio_bounded;
 mod tokio_unbounded;
-mod futures_unbounded;
+// mod futures_unbounded;
 mod error;
 
 pub use
@@ -39,7 +38,7 @@ pub use
 	// crate::crossfire::*,
 	tokio_bounded::*,
 	tokio_unbounded::*,
-	futures_unbounded::*,
+	// futures_unbounded::*,
 	error::*,
 };
 

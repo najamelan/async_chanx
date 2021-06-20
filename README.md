@@ -40,14 +40,14 @@ With [cargo yaml](https://gitlab.com/storedbox/cargo-yaml):
 ```yaml
 dependencies:
 
-   async_chanx: ^0.1
+   async_chanx: ^0.1.0-alpha
 ```
 
 With Cargo.toml
 ```toml
 [dependencies]
 
-    async_chanx = "0.1"
+    async_chanx = "0.1.0-alpha"
 ```
 
 ### Upgrade

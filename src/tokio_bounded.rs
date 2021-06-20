@@ -1,6 +1,6 @@
 use
 {
-	crate::{ import::*, ChanErr },
+	crate::{ import::*, ChanErr, ChanErrKind },
 	tokio::sync::mpsc::{ Sender, error::{ SendError }, OwnedPermit,  },
 };
 
@@ -92,7 +92,14 @@ impl<I: 'static + Send> Sink<I> for TokioSender<I>
 
 					Err(_) =>
 					{
-						return Poll::Ready( Err(ChanErr::Closed) )
+						return Poll::Ready( Err
+						(
+							ChanErr
+							{
+								kind: ChanErrKind::Closed,
+								item: None,
+							}
+						))
 					}
 				}
 			}
