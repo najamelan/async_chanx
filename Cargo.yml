@@ -26,7 +26,7 @@ package:
   # - `git tag x.x.x` with version number.
   # - `git push && git push --tags`
   #
-  version       : 0.1.0-alpha.2
+  version       : 0.1.0-alpha.3
   name          : async_chanx
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : UPDATE ME
@@ -36,7 +36,8 @@ package:
   keywords      : []
   categories    : []
   license       : Unlicense
-  edition       : "2018"
+  edition       : '2018'
+  resolver      : '2'
   exclude       : [ benches, examples, tests ]
 
   metadata:
@@ -61,11 +62,9 @@ dependencies:
   # Public dependencies (bump major if changing any version number here)
   # Means we use types from these crates in our public API.
   #
-  futures-core : ^0.3
+  # futures-core : ^0.3
   futures-sink : ^0.3
   tokio        : { version: ^1, features: [ sync ] }
-  tokio-stream : ^0.1
-  futures      : ^0.3
   # async-channel: ^1
 
   # Private dependencies
@@ -74,6 +73,7 @@ dependencies:
 
 dev-dependencies:
 
+  tokio-stream : ^0.1
   async-std         : { version: ^1, features: [ attributes ], default-features: false }
   pretty_assertions : ^0.7
   assert_matches    : ^1
@@ -81,10 +81,11 @@ dev-dependencies:
   async_executors   : { version: ^0.4, features: [ async_std, localpool ] }
   tokio             : { version: ^1, features: [ sync ] }
   futures-test      : ^0.3
+  futures      : ^0.3
 
 build-dependencies:
 
-  rustc_version: ^0.3
+  rustc_version: ^0.4
 
 
 bench:
