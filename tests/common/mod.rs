@@ -9,5 +9,5 @@ pub use
 	async_chanx    :: { * } ,
 	bounded        :: { * } ,
 	assert_matches :: { * } ,
-	tokio          :: { sync::Notify } ,
+	tokio_crate    :: { sync::Notify } ,
 };

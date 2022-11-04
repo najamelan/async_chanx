@@ -1,13 +1,15 @@
 use
 {
 	crate::{ import::*, ChanErr, ChanErrKind },
-	tokio::sync::mpsc::{ Sender, error::{ SendError }, OwnedPermit,  },
+	tokio_crate::sync::mpsc::{ Sender as TokioSender, error::{ SendError }, OwnedPermit,  },
 };
 
 
+type ReserveResult<M> = Result<OwnedPermit<M>, SendError<()>>;
+
 enum Inner<M>
 {
-	Future(Pin<Box<dyn Future<Output = Result<OwnedPermit<M>, SendError<()>>> + Send >> ),
+	Future(Pin<Box<dyn Future<Output = ReserveResult<M>> + Send >> ),
 	Permit(OwnedPermit<M>),
 }
 
@@ -15,19 +17,19 @@ enum Inner<M>
 /// A wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
 /// It will also return [`ChanErr`] like all the other wrappers in this crate.
 //
-pub struct TokioSender<I>
+pub struct Sender<I>
 {
 	inner : Option< Inner<I> >,
-	sender: Sender<I>         ,
+	sender: TokioSender<I>    ,
 }
 
 
-impl<I> TokioSender<I>
+impl<I> Sender<I>
 {
 	/// Create a wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
 	/// It will also return [`ChanErr`] like all the other wrappers in this crate.
 	//
-	pub fn new( sender: Sender<I> ) -> TokioSender<I>
+	pub fn new( sender: TokioSender<I> ) -> Self
 	{
 		Self
 		{
@@ -38,21 +40,21 @@ impl<I> TokioSender<I>
 
 	/// Access the inner [`tokio::sync::mpsc::Sender`].
 	//
-	pub fn inner( &self ) -> &Sender<I>
+	pub fn inner( &self ) -> &TokioSender<I>
 	{
 		&self.sender
 	}
 
 	/// Access the inner [`tokio::sync::mpsc::Sender`] mutably.
 	//
-	pub fn inner_mut( &mut self ) -> &mut Sender<I>
+	pub fn inner_mut( &mut self ) -> &mut TokioSender<I>
 	{
 		&mut self.sender
 	}
 }
 
 
-impl<I: 'static + Send> Sink<I> for TokioSender<I>
+impl<I: 'static + Send> Sink<I> for Sender<I>
 {
 	type Error = ChanErr<I>;
 
@@ -60,6 +62,7 @@ impl<I: 'static + Send> Sink<I> for TokioSender<I>
 	/// When calling reserve_owned, we will store the future in the option so we can poll it
 	/// to completion.
 	//
+	#[allow(clippy::needless_return)]
 	fn poll_ready(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>>
 	{
 		let inner = self.inner.take();
@@ -141,7 +144,7 @@ impl<I: 'static + Send> Sink<I> for TokioSender<I>
 }
 
 
-impl<I> Clone for TokioSender<I>
+impl<I> Clone for Sender<I>
 {
 	fn clone(&self) -> Self
 	{
@@ -157,7 +160,7 @@ impl<I> Clone for TokioSender<I>
 
 
 
-impl<I> fmt::Debug for TokioSender<I>
+impl<I> fmt::Debug for Sender<I>
 {
 	fn fmt( &self, f: &mut fmt::Formatter<'_> ) -> fmt::Result
 	{
@@ -166,5 +169,15 @@ impl<I> fmt::Debug for TokioSender<I>
 			.field("sender", &self.sender )
 
 		.finish()
+	}
+}
+
+
+
+impl<I> From<TokioSender<I>> for Sender<I>
+{
+	fn from( from: TokioSender<I> ) -> Self
+	{
+		Self::new(from)
 	}
 }

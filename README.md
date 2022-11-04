@@ -8,13 +8,13 @@
 
 > Impl Sink for common async channel implementations.
 
+DEVELOPMENT STATUS: alpha and not promising to become anything else anytime soon! I decided to push this on crates.io to facilitate progressing on and publishing alpha versions of other crates that use this. It completely lacks polish and is not recommended for production until it reaches 0.1. Testing, examples and documentation are largely missing and algorithms still need to be reviewed.
+
 This library implements the missing Sink implementation for common async channels like tokio-sync. It introduces a common error type for channel senders and wraps some implementations that already provide Sink, to make it ergonomic to abstract out over them.
 
 This serves 2 purposes:
 - for libraries: let your users decide which channel implementation to use in your library. The main benefit of this is where this will change the behavior of your lib: bounded vs unbounded, backpressure vs overwriting older messages etc.
 - conveniently compare the performance of channel implementations for your workload by making them plug and play.
-
-DEVELOPMENT STATUS: alpha! I decided to push this on crates.io to facilitate progressing on and publishing alpha versions of other crates that use this. It completely lacks polish and is not recommended for production until it reaches 0.1. Testing, examples and documentation are largely missing and algorithms still need to be reviewed.
 
 Currently I'm waiting to see if async-channel will implement `Sink`, so I don't have to do it here and then I will work on polishing this some more.
 

@@ -22,8 +22,14 @@ rustc_version = "^0.4"
 [dependencies]
 futures-sink = "^0.3"
 
-[dependencies.tokio]
+[dependencies.tokio-stream]
+optional = true
+version = "^0.1"
+
+[dependencies.tokio_crate]
 features = ["sync"]
+optional = true
+package = "tokio"
 version = "^1"
 
 [dev-dependencies]
@@ -32,7 +38,6 @@ criterion = "^0.3"
 futures = "^0.3"
 futures-test = "^0.3"
 pretty_assertions = "^0.7"
-tokio-stream = "^0.1"
 
 [dev-dependencies.async-std]
 default-features = false
@@ -43,26 +48,27 @@ version = "^1"
 features = ["async_std", "localpool"]
 version = "^0.4"
 
-[dev-dependencies.tokio]
+[dev-dependencies.tokio_crate]
 features = ["sync"]
+package = "tokio"
 version = "^1"
 
 [features]
+tokio = ["tokio_crate", "tokio-stream"]
 
 [package]
 authors = ["Naja Melan <najamelan@autistici.org>"]
 categories = []
-description = "UPDATE ME"
+description = "Implement `Sink` for some channel implementations."
 documentation = "https://docs.rs/async_chanx"
-edition = "2018"
+edition = "2021"
 exclude = ["benches", "examples", "tests"]
 keywords = []
 license = "Unlicense"
 name = "async_chanx"
 readme = "README.md"
 repository = "https://github.com/najamelan/async_chanx"
-resolver = "2"
-version = "0.1.0-alpha.3"
+version = "0.1.0-alpha.4"
 
 [package.metadata]
 [package.metadata.docs]

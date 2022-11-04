@@ -20,6 +20,11 @@ use
 	common :: { * } ,
 };
 
+#[cfg(feature="tokio")]
+//
+use async_chanx::tokio;
+
+
 const MESSAGES: usize = 10_000;
 const THREADS : usize = 4;
 
@@ -43,6 +48,8 @@ fn seq( c: &mut Criterion )
 
 		group.sample_size( 10 );
 
+		#[cfg(feature="tokio")]
+		//
 		group.bench_function( format!( "Seq Tokio sync, buffer size: {} msgs", &buffer_size ), |b|
 		{
 			let mut pool = LocalPool::new();
@@ -53,9 +60,7 @@ fn seq( c: &mut Criterion )
 
 				|| // setup
 				{
-					let (tx, rx) = mpsc::channel( *buffer_size +1 );
-					let tx = TokioSender::new( tx );
-
+					let (tx, rx) = tokio::mpsc::channel( *buffer_size +1 );
 					seq_run( tx, rx, MESSAGES, &exec );
 				},
 
@@ -90,30 +95,6 @@ fn seq( c: &mut Criterion )
 				BatchSize::SmallInput
 			)
 		});
-
-
-		group.bench_function( format!( "Seq influmenza mpsc, buffer size: {} msgs", &buffer_size ), |b|
-		{
-			let mut pool = LocalPool::new();
-			let exec = pool.spawner();
-
-			b.iter_batched
-			(
-				|| // setup
-				{
-					let (tx, rx) = influmenza::channel( Some( *buffer_size ) );
-
-					seq_run( tx, rx, MESSAGES, &exec );
-				},
-
-				// measure
-				//
-				|_| pool.run(),
-
-				BatchSize::SmallInput
-			)
-		});
-
 	}
 }
 
@@ -137,6 +118,8 @@ fn spsc( c: &mut Criterion )
 
 		group.sample_size( 10 );
 
+		#[cfg(feature="tokio")]
+		//
 		group.bench_function
 		(
 			format!( "Spsc Tokio sync, buffer size: {} msgs", &buffer_size ),
@@ -145,9 +128,7 @@ fn spsc( c: &mut Criterion )
 			(
 				move || // setup
 				{
-					let (tx, rx) = mpsc::channel( *buffer_size +1 );
-					let mut tx = TokioSender::new( tx );
-
+					let (mut tx, rx) = tokio::mpsc::channel( *buffer_size +1 );
 					let (start_tx, start_rx) = oneshot::channel();
 
 					let handle = std::thread::spawn( move ||
@@ -235,55 +216,6 @@ fn spsc( c: &mut Criterion )
 				BatchSize::SmallInput
 			)
 		);
-
-		group.bench_function
-		(
-			format!( "Spsc influmenza mpsc, buffer size: {} msgs", &buffer_size ),
-
-			|b| b.iter_batched
-			(
-				move || // setup
-				{
-					let (mut tx, rx) = influmenza::channel( Some( *buffer_size ) );
-
-					let (start_tx, start_rx) = oneshot::channel();
-
-					let handle = std::thread::spawn( move ||
-					{
-						block_on( async move
-						{
-							start_rx.await.expect( "oneshot receive" );
-
-							for i in 0..MESSAGES
-							{
-								tx.send( Msg::new(i) ).await.expect( "send msg" );
-							}
-						});
-					});
-
-					(start_tx, rx, handle)
-				},
-
-
-				|(start_tx, mut rx, handle)| // routine
-				{
-					start_tx.send(()).expect( "oneshot send" );
-
-					block_on( async move
-					{
-						for _ in 0..MESSAGES
-						{
-							rx.next().await;
-						}
-
-					});
-
-					handle.join().expect( "join thread" );
-				},
-
-				BatchSize::SmallInput
-			)
-		);
 	}
 }
 
@@ -332,6 +264,8 @@ fn mpsc( c: &mut Criterion )
 		// 	_   => { unreachable!();           }
 		// }
 
+		#[cfg(feature="tokio")]
+		//
 		group.bench_function
 		(
 			format!( "Mpsc tokio sync mpsc, buffer size: {} msgs", &buffer_size ),
@@ -340,8 +274,7 @@ fn mpsc( c: &mut Criterion )
 			(
 				move || // setup
 				{
-					let (tx, rx) = mpsc::channel( *buffer_size +THREADS );
-					let tx = TokioSender::new( tx );
+					let (tx, rx) = tokio::mpsc::channel( *buffer_size +THREADS );
 
 					let mut handles   = Vec::new();
 					let mut start_txs = Vec::new();
@@ -454,71 +387,10 @@ fn mpsc( c: &mut Criterion )
 				BatchSize::SmallInput
 			)
 		);
-
-		// group.bench_function
-		// (
-		// 	format!( "Mpsc influmenza mpsc, buffer size: {} msgs", &buffer_size ),
-
-		// 	|b| b.iter_batched
-		// 	(
-		// 		move || // setup
-		// 		{
-		// 			let (tx, rx) = influmenza::channel( Some( *buffer_size ) );
-
-		// 			let mut handles   = Vec::new();
-		// 			let mut start_txs = Vec::new();
-
-		// 			for _ in 0..THREADS
-		// 			{
-		// 				let (start_tx, start_rx) = oneshot::channel();
-		// 				let mut tx = tx.clone();
-
-		// 				let handle = std::thread::spawn( move ||
-		// 				{
-		// 					block_on( async move
-		// 					{
-		// 						start_rx.await.expect( "oneshot receive" );
-
-		// 						for i in 0..MESSAGES/THREADS
-		// 						{
-		// 							tx.send( Msg::new(i) ).await.expect( "send msg" );
-		// 						}
-		// 					});
-		// 				});
-
-		// 				handles  .push( handle   );
-		// 				start_txs.push( start_tx );
-		// 			}
-
-		// 			(start_txs, rx, handles)
-		// 		},
-
-
-		// 		|(start_txs, mut rx, handles)| // routine
-		// 		{
-		// 			for s in start_txs.into_iter()
-		// 			{
-		// 				s.send(()).expect( "oneshot send" );
-		// 			}
-
-		// 			block_on( async move
-		// 			{
-		// 				for _ in 0..MESSAGES { rx.next().await; }
-		// 			});
-
-		// 			for h in handles.into_iter()
-		// 			{
-		// 				h.join().expect( "join thread" );
-		// 			}
-		// 		},
-
-		// 		BatchSize::SmallInput
-		// 	)
-		// );
 	}
 }
 
 
 
-criterion_group!( benches, /*seq, spsc,*/ mpsc );
+criterion_group!( benches, seq, spsc, mpsc );
 criterion_main! ( benches );

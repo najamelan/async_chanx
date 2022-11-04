@@ -1,8 +1,5 @@
-// See: https://github.com/rust-lang/rust/issues/44732#issuecomment-488766871
-//
-#![cfg_attr( nightly, feature(doc_cfg) )]
-#![ cfg_attr( nightly, cfg_attr( nightly, doc = include_str!("../README.md") )) ]
-#![doc = ""] // empty doc line to handle missing doc warning when the feature is missing.
+#![ cfg_attr( nightly, feature(doc_cfg) ) ]
+#![ doc = include_str!("../README.md") ]
 
 #![ doc    ( html_root_url = "https://docs.rs/async_chanx" ) ]
 #![ allow  ( clippy::suspicious_else_formatting            ) ]
@@ -27,8 +24,6 @@
 
 // mod async_channel;
 // mod crossfire;
-mod tokio_bounded;
-mod tokio_unbounded;
 // mod futures_unbounded;
 mod error;
 
@@ -36,8 +31,6 @@ pub use
 {
 	// crate::async_channel::*,
 	// crate::crossfire::*,
-	tokio_bounded::*,
-	tokio_unbounded::*,
 	// futures_unbounded::*,
 	error::*,
 };
@@ -49,9 +42,26 @@ mod import
 {
 	pub(crate) use
 	{
-		std :: { fmt, task::{ Context, Poll }, pin::Pin, future::Future } ,
+		std ::fmt
+	};
+
+	#[cfg(feature="tokio")]
+	pub(crate) use
+	{
+		std :: { task::{ Context, Poll }, pin::Pin, future::Future } ,
 		futures_sink:: { Sink } ,
 	};
 }
 
+
+/// Wrappers around `tokio::sync` channels.
+//
+#[cfg( feature="tokio" )]
+//
+pub mod tokio
+{
+	/// Wrappers around `tokio::sync::mpsc` channels.
+	//
+	pub mod mpsc;
+}
 

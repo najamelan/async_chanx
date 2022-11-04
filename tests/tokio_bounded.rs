@@ -4,7 +4,7 @@
 
 use
 {
-	tokio::sync::mpsc,
+	async_chanx::tokio::mpsc,
 };
 
 
@@ -19,8 +19,7 @@ pub use common::*;
 //
 fn tokio_bounded_sp_buffer_size()
 {
-	let (tx, _rx) = mpsc::channel( 3 );
-	let mut tx    = TokioSender::new( tx );
+	let (mut tx, _rx) = mpsc::channel( 3 );
 
 	crate::assert_matches!( sp_buffer_size( &mut tx ), MessageCount::Ready( Ok(4) ) );
 }
@@ -35,10 +34,7 @@ fn tokio_bounded_receiver_woken_when_senders_dropped()
 	let (start_tx, start_rx) = oneshot::channel();
 	let (end_tx  , end_rx  ) = oneshot::channel();
 
-	let (tx, rx) = mpsc::channel::<()>( 3 );
-	let mut tx   = TokioSender::new( tx );
-
-	let mut rx = tokio_stream::wrappers::ReceiverStream::new(rx);
+	let (mut tx, mut rx) = mpsc::channel::<()>( 3 );
 
 	let sender_thread = std::thread::spawn( move ||
 	{
