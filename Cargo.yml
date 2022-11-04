@@ -26,18 +26,18 @@ package:
   # - `git tag x.x.x` with version number.
   # - `git push && git push --tags`
   #
-  version       : 0.1.0-alpha.3
+  version       : 0.1.0-alpha.4
   name          : async_chanx
   authors       : [ Naja Melan <najamelan@autistici.org> ]
-  description   : UPDATE ME
+  description   : Implement `Sink` for some channel implementations.
   documentation : https://docs.rs/async_chanx
   repository    : https://github.com/najamelan/async_chanx
   readme        : README.md
   keywords      : []
   categories    : []
   license       : Unlicense
-  edition       : '2018'
-  resolver      : '2'
+  edition       : '2021'
+
   exclude       : [ benches, examples, tests ]
 
   metadata:
@@ -55,7 +55,7 @@ badges:
 
 features:
 
-
+  tokio: [tokio_crate, tokio-stream]
 
 dependencies:
 
@@ -64,7 +64,8 @@ dependencies:
   #
   # futures-core : ^0.3
   futures-sink : ^0.3
-  tokio        : { version: ^1, features: [ sync ] }
+  tokio_crate  : { package: tokio, optional: true, version: ^1, features: [ sync ] }
+  tokio-stream : { version: ^0.1, optional: true }
   # async-channel: ^1
 
   # Private dependencies
@@ -73,13 +74,12 @@ dependencies:
 
 dev-dependencies:
 
-  tokio-stream : ^0.1
   async-std         : { version: ^1, features: [ attributes ], default-features: false }
   pretty_assertions : ^0.7
   assert_matches    : ^1
   criterion         : ^0.3
   async_executors   : { version: ^0.4, features: [ async_std, localpool ] }
-  tokio             : { version: ^1, features: [ sync ] }
+  tokio_crate       : { package: tokio, version: ^1, features: [ sync ] }
   futures-test      : ^0.3
   futures      : ^0.3
 

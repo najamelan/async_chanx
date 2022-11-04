@@ -1,46 +1,46 @@
 use
 {
 	crate::{ import::*, ChanErr, ChanErrKind },
-	tokio::sync::mpsc::{ UnboundedSender, error::{ SendError } },
+	tokio_crate::sync::mpsc::{ UnboundedSender as TokioSender, error::{ SendError } },
 };
 
 
 /// A wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
 /// It will also return [`ChanErr`] like all the other wrappers in this crate.
 //
-pub struct TokioUnboundedSender<I>
+pub struct UnboundedSender<I>
 {
-	inner: UnboundedSender<I>,
+	inner: TokioSender<I>,
 }
 
 
-impl<I> TokioUnboundedSender<I>
+impl<I> UnboundedSender<I>
 {
 	/// Create a wrapper around [`tokio::sync::mpsc::Sender`] that implements [`Sink`].
 	/// It will also return [`ChanErr`] like all the other wrappers in this crate.
 	//
-	pub fn new( inner: UnboundedSender<I> ) -> TokioUnboundedSender<I>
+	pub fn new( inner: TokioSender<I> ) -> UnboundedSender<I>
 	{
 		Self{ inner }
 	}
 
 	/// Access the inner [`tokio::sync::mpsc::Sender`].
 	//
-	pub fn inner( &self ) -> &UnboundedSender<I>
+	pub fn inner( &self ) -> &TokioSender<I>
 	{
 		&self.inner
 	}
 
 	/// Access the inner [`tokio::sync::mpsc::Sender`] mutably.
 	//
-	pub fn inner_mut( &mut self ) -> &mut UnboundedSender<I>
+	pub fn inner_mut( &mut self ) -> &mut TokioSender<I>
 	{
 		&mut self.inner
 	}
 }
 
 
-impl<I> Sink<I> for TokioUnboundedSender<I>
+impl<I> Sink<I> for UnboundedSender<I>
 {
 	type Error = ChanErr<I>;
 
@@ -82,7 +82,7 @@ impl<I> Sink<I> for TokioUnboundedSender<I>
 }
 
 
-impl<I> Clone for TokioUnboundedSender<I>
+impl<I> Clone for UnboundedSender<I>
 {
 	fn clone(&self) -> Self
 	{
@@ -92,16 +92,25 @@ impl<I> Clone for TokioUnboundedSender<I>
 
 
 
-
-
-impl<I> fmt::Debug for TokioUnboundedSender<I>
+impl<I> fmt::Debug for UnboundedSender<I>
 {
 	fn fmt( &self, f: &mut fmt::Formatter<'_> ) -> fmt::Result
 	{
-		f.debug_struct( "TokioUnboundedSender" )
+		f.debug_struct( "UnboundedSender" )
 
 			.field("inner", &self.inner )
 
 		.finish()
+	}
+}
+
+
+
+
+impl<I> From<TokioSender<I>> for UnboundedSender<I>
+{
+	fn from( from: TokioSender<I> ) -> Self
+	{
+		Self::new(from)
 	}
 }

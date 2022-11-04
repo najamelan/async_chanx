@@ -1,15 +1,12 @@
 pub use
 {
-	// async_std :: { } ,
-
 	std             :: { task::{ Context, Poll }, pin::Pin, fmt, future::Future } ,
 	futures         :: { Stream, Sink, task::{ noop_waker, LocalSpawnExt }, sink::SinkExt, stream::StreamExt, future::join, executor::{ LocalPool, block_on }, channel::oneshot } ,
 	async_chanx     :: { * } ,
 	assert_matches  :: { * } ,
 	async_executors :: { * } ,
-	tokio           :: { sync::mpsc } ,
+	tokio_crate     :: { sync::mpsc } ,
 	criterion       :: { Criterion, criterion_group, criterion_main, BatchSize, Bencher } ,
-	influmenza      :: { * },
 };
 
 const MSG_LEN: usize = 1;
@@ -35,16 +32,6 @@ impl fmt::Debug for Msg
 		f.pad( "Msg" )
 	}
 }
-
-
-
-
-
-pub fn get_exec<T: Send + 'static>() -> impl SpawnHandle<T>
-{
-	AsyncStd::default()
-}
-
 
 
 
