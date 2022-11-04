@@ -34,19 +34,14 @@ version = "^1"
 
 [dev-dependencies]
 assert_matches = "^1"
-criterion = "^0.3"
+criterion = "^0.4"
 futures = "^0.3"
 futures-test = "^0.3"
-pretty_assertions = "^0.7"
-
-[dev-dependencies.async-std]
-default-features = false
-features = ["attributes"]
-version = "^1"
+pretty_assertions = "^1"
 
 [dev-dependencies.async_executors]
 features = ["async_std", "localpool"]
-version = "^0.4"
+version = "^0.6"
 
 [dev-dependencies.tokio_crate]
 features = ["sync"]
@@ -68,7 +63,7 @@ license = "Unlicense"
 name = "async_chanx"
 readme = "README.md"
 repository = "https://github.com/najamelan/async_chanx"
-version = "0.1.0-alpha.4"
+version = "0.1.0-alpha.5"
 
 [package.metadata]
 [package.metadata.docs]

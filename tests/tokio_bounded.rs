@@ -1,3 +1,5 @@
+#![cfg( feature = "tokio" )]
+
 // Tested:
 // - Backpressure occurs at exactly bound.
 // - Receiver get woken up if all senders are dropped.
