@@ -26,7 +26,7 @@ package:
   # - `git tag x.x.x` with version number.
   # - `git push && git push --tags`
   #
-  version       : 0.1.0-alpha.4
+  version       : 0.1.0-alpha.5
   name          : async_chanx
   authors       : [ Naja Melan <najamelan@autistici.org> ]
   description   : Implement `Sink` for some channel implementations.
@@ -74,14 +74,13 @@ dependencies:
 
 dev-dependencies:
 
-  async-std         : { version: ^1, features: [ attributes ], default-features: false }
-  pretty_assertions : ^0.7
+  pretty_assertions : ^1
   assert_matches    : ^1
-  criterion         : ^0.3
-  async_executors   : { version: ^0.4, features: [ async_std, localpool ] }
+  criterion         : ^0.4
+  async_executors   : { version: ^0.6, features: [ async_std, localpool ] }
   tokio_crate       : { package: tokio, version: ^1, features: [ sync ] }
   futures-test      : ^0.3
-  futures      : ^0.3
+  futures           : ^0.3
 
 build-dependencies:
 
